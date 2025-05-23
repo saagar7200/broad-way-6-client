@@ -11,7 +11,7 @@ import { login } from '@/api/auth.api';
 import {useMutation} from  '@tanstack/react-query'
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-
+import Cookies from 'js-cookie'
 
 
 const LoginForm = () => {
@@ -31,6 +31,9 @@ const LoginForm = () => {
       toast.success(response.message ?? 'Login success!!!!')
       console.log('on success',response)
       localStorage.setItem('user',JSON.stringify(response.data))
+      if(response.access_token){
+          Cookies.set('access_token',response.access_token)
+      }
       router.replace('/')
       reset()
 

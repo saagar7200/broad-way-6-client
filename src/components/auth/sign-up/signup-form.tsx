@@ -1,20 +1,29 @@
 "use client";
 
 import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import {useForm } from "react-hook-form";
 import { LuAsterisk } from "react-icons/lu";
 import { IRegister } from "@/interfaces/auth.interface";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RegisterSchema } from "@/schema/auth.schema";
+import {register as registerUser} from '@/api/auth.api'
+
+import {useMutation} from '@tanstack/react-query'
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 
 const SignUpForm = () => {
+	const router = useRouter()
 	const {
+		reset,
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<IRegister>({
 		defaultValues: {
 			fullName: "",
+			userName: "",
 			email: "",
 			password: "",
 			confirmPassword: "",
@@ -24,10 +33,29 @@ const SignUpForm = () => {
 		resolver: yupResolver(RegisterSchema),
 		mode: "all",
 	});
+
+
+	const {mutate,isPending} = useMutation({
+		mutationFn:registerUser,
+		onSuccess:(data) =>{
+			console.log('success',data)
+			toast.success(data?.message ?? 'User registered successfully.')
+			reset()
+			router.replace('/auth/login')
+		},
+		onError:(error) =>{
+			toast.error(error?.message ?? 'Registration failed.')
+		}
+	})
+
+
 	console.log(errors);
 
-	const onSubmit: SubmitHandler<Partial<IRegister>> = (data) => {
+	const onSubmit = (data:IRegister) => {
 		console.log("register submitted", data);
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const {confirmPassword,...others} = data
+		mutate(others)
 	};
 
 	return (
@@ -50,6 +78,24 @@ const SignUpForm = () => {
 						/>
 						{errors.fullName && (
 							<p className="text-red-500 text-xs">{errors.fullName.message}</p>
+						)}
+					</div>
+					<div className="flex flex-col gap-1 mt-4">
+						<label className="flex text-lg font-semibold text-gray-800">
+							User Name <LuAsterisk className="text-sm text-red-500" />
+						</label>
+						<input
+							{...register("userName")}
+							placeholder="Jhon Doe"
+							type="text"
+							className={`placeholder:text-lg text-lg border border-gray-400 px-2 py-2 rounded-md  ${
+								errors.userName
+									? " border-red-500 focus:outline-red-500"
+									: "focus:outline-blue-400"
+							}`}
+						/>
+						{errors.userName && (
+							<p className="text-red-500 text-xs">{errors.userName.message}</p>
 						)}
 					</div>
 					<div className="flex flex-col gap-1 mt-4">
@@ -129,10 +175,11 @@ const SignUpForm = () => {
 					</div>
 					<div className="w-full mt-8">
 						<button
+						disabled={isPending}
 							type="submit"
-							className="shadow-xl cursor-pointer w-full bg-blue-600 text-white py-3  rounded-md font-bold text-xl"
+							className="disabled:cursor-not-allowed shadow-xl cursor-pointer w-full bg-blue-600 text-white py-3  rounded-md font-bold text-xl"
 						>
-							Sign Up
+							{isPending ? 'Loading... ' : 'Sign Up'}
 						</button>
 					</div>
 				</div>

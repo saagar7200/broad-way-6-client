@@ -1,16 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {ILogin} from '@/interfaces/auth.interface'
-import axios from 'axios'
+import {ILogin, IRegister} from '@/interfaces/auth.interface'
+import apiInstance from '.'
 
-const url = process.env.NEXT_PUBLIC_API
 export const login = async(data:ILogin) =>{
 
     try{
 
-        const response = await axios.post(`${url}user/login`,data)
+        const response = await apiInstance.post(`/user/login`,data)
         return response.data
 
+    }catch(error:any){
+        throw error.response.data
+    }
+    
 
+}
+
+
+export const register = async(data:Omit<IRegister,'confirmPassword'>) =>{
+
+    try{
+
+        const response = await apiInstance.post(`/user/register`,data)
+        return response.data
 
     }catch(error:any){
         throw error.response.data

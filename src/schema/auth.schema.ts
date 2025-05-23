@@ -9,6 +9,7 @@ export const LoginSchema = yup.object({
 
 export const RegisterSchema = yup.object({
     fullName:yup.string().required('Full name is required.'),
+    userName:yup.string().required('User name is required.'),
     email:yup.string().required('Email is required.').email('Enter valid email.'),
     password:yup.string().required('Password is required').min(6,'Password must be at least 6 character long.').matches(
         /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/,
