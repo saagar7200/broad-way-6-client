@@ -60,9 +60,9 @@ const LoginForm = () => {
   }
 
   return (
-    <div className='w-full h-full flex  justify-center items-center tracking-wider'  >
-        <form  onSubmit={handleSubmit(submit)}>
-        <div className='w-[400px] border border-blue-600  px-4 py-10 rounded-md'>
+    <div className=' w-full h-full flex  justify-center items-center tracking-wider'  >
+        <form className='w-full h-full flex items-center justify-center'  onSubmit={handleSubmit(submit)}>
+        <div className='w-[min(100%,400px)]   md:w-[400px] border border-blue-600  px-4 py-10 rounded-md'>
         <h2 className='text-center text-2xl font-bold '>Login</h2>
         {/* email */}
         <div className='flex flex-col gap-1 mt-4'>

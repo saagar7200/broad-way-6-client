@@ -11,6 +11,7 @@ import {register as registerUser} from '@/api/auth.api'
 import {useMutation} from '@tanstack/react-query'
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 const SignUpForm = () => {
@@ -59,10 +60,10 @@ const SignUpForm = () => {
 	};
 
 	return (
-		<div>
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="w-[400px] py-4 rounded-md">
-					<div className="flex flex-col gap-1 mt-4">
+		<div className="">
+			<form className="w-full  flex justify-center items-center" onSubmit={handleSubmit(onSubmit)}>
+				<div className="w-full rounded-md">
+					<div className="flex flex-col gap-1 ">
 						<label className="flex text-lg font-semibold text-gray-800">
 							Full Name <LuAsterisk className="text-sm text-red-500" />
 						</label>
@@ -182,6 +183,9 @@ const SignUpForm = () => {
 							{isPending ? 'Loading... ' : 'Sign Up'}
 						</button>
 					</div>
+					<div className='flex justify-center mt-4'>
+              		<p>Already have an account?<Link href={'/auth/login'}><span className='ml-1 text-blue-500 underline'>Login</span></Link></p>
+            		</div>
 				</div>
 			</form>
 		</div>

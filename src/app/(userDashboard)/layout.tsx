@@ -1,6 +1,8 @@
+'use client'
 import SideBar from '@/components/layout/sidebar/sidebar'
 import Header from '@/components/layout/header/header'
 import React from 'react'
+import { withAuth } from '@/components/auth/withAuth'
 
 const Layout = ({children}:Readonly<{children:React.ReactNode}>) =>{
 
@@ -18,7 +20,7 @@ const Layout = ({children}:Readonly<{children:React.ReactNode}>) =>{
                 </div>
     
                  {/* main content */}
-                 <div className='-z-50 min-h-[100vh] mt-15 flex flex-col h-full p-5 overflow-y-auto'>
+                 <div className='-z-50 min-h-[100vh] mt-0 flex flex-col h-full p-5 overflow-y-auto'>
                     {children}
                 </div>
     
@@ -33,4 +35,4 @@ const Layout = ({children}:Readonly<{children:React.ReactNode}>) =>{
 
 }
 
-export default Layout
+export default withAuth(Layout,['User'])
