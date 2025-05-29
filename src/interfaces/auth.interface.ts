@@ -11,3 +11,16 @@ export interface IRegister {
     phone?:string;
     confirmPassword:string
 }
+
+
+export interface IUser {
+    fullName:string;
+    email:string;
+    password:string;
+    role:string;
+    userName:string;
+    createdAt:string;
+    updatedAt:string;
+    _id:string;
+
+}

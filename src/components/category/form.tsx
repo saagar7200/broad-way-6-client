@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import Input from '../common/inputs/input'
 
 const CategoryForm  = () => {
 
@@ -30,7 +31,6 @@ const CategoryForm  = () => {
     })
 
     const onSubmit = (data:ICategory) =>{
-        console.log('category from data',data)
         mutate(data)
     }
 
@@ -39,26 +39,26 @@ const CategoryForm  = () => {
   <div className=' h-full w-full flex items-center mt-18'>
       <div className='flex w-[min(100%,350px)]  mx-auto tracking-wider border border-blue-400  px-6 py-8  rounded-md'>
         <form className='w-full flex flex-col gap-2' onSubmit={handleSubmit(onSubmit)}>
-            <div className='flex flex-col gap-1'>
-                <label className=' text-lg  '>Category Name</label>
-                <input  
-                    {...register('name')} 
-                    placeholder='Entertainment'
-                     className={`border border-gray-400 rounded-md py-2 px-3 ${errors.name ? "focus:outline-red-500 border-red-500" :  'focus:outline-blue-400'}`}   
-                />
-                {errors.name && <p className='text-xs text-red-500 mt-0'>{errors.name.message}</p>}
-            </div>
+           
+            <Input
+                label={'Name'}
+                name={'name'}
+                required
+                error={errors?.name?.message}
+                register={register}
+                placeholder={'Entertainment'}
+            />
 
-            <div className='flex flex-col gap-1'>
-                <label className=' text-lg  '>Description</label>
-                <textarea  
-                    {...register('description')} 
-                    placeholder='write here....'
-                     className='border border-gray-400 rounded-md py-2 px-3 focus:outline-blue-400'   
-                />
-                {errors.description && <p className='text-xs text-red-500 mt-0'>{errors.description.message}</p>}
+            <Input
+            label={'Description'}
+            name={'description'}
+            multiline
+            error={errors?.description?.message}
+            register={register}
+            placeholder={'Start typing here..'}
+            />
 
-            </div>
+
 
             <div className='w-full flex items-center mt-8 '>
                 <button disabled={isPending} className='cursor-pointer disabled:cursor-not-allowed disabled:bg-blue-300  w-full bg-blue-500 text-amber-50 font-bold text-xl py-3 rounded-md'>

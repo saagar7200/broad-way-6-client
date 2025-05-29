@@ -12,10 +12,12 @@ import {useMutation} from  '@tanstack/react-query'
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Cookies from 'js-cookie'
+import useAuth from '@/hooks/useAuth';
 
 
 const LoginForm = () => {
   const router = useRouter()
+  const {updateUser} = useAuth()
   const {reset,register,handleSubmit,formState:{errors}} = useForm<ILogin>({
     defaultValues:{
       email:'',
@@ -31,6 +33,7 @@ const LoginForm = () => {
       toast.success(response.message ?? 'Login success!!!!')
       console.log('on success',response)
       localStorage.setItem('user',JSON.stringify(response.data))
+      updateUser(response.data)
       if(response.access_token){
           Cookies.set('access_token',response.access_token)
       }

@@ -1,11 +1,14 @@
+'use client'
 import { MdOutlinePerson } from "react-icons/md";
 import Link from 'next/link'
 import { AiOutlineLogout } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie'
+import useAuth from "@/hooks/useAuth";
 
 const Header = () =>{
     const router = useRouter()
+    const {user} = useAuth()
 
     const handleLogout = () =>{
         Cookies.remove('access_token')
@@ -17,7 +20,7 @@ const Header = () =>{
     return(
         <div className='w-full h-full flex flex-1  items-center justify-between tracking-wider px-4'>
             <div>
-                <p >Hello Bob</p>
+                <p >Welcome Back, <span className="italic font-semibold text-blue-600"> {user?.fullName ?? user?.userName}</span></p>
             </div>
             <div className='flex items-center gap-4 h-full'>
                 <Link href={'#'}>
