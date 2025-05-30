@@ -44,9 +44,9 @@ import {  flexRender, getCoreRowModel, useReactTable,
           </thead>
           <tbody>
             {table.getRowModel().rows.map(row => (
-              <tr key={row.id}>
+              <tr className='hover:bg-blue-50' key={row.id}>
                 {row.getVisibleCells().map(cell => (
-                  <td className='border-b border-gray-200 text-center text-lg py-3 '  key={cell.id}>
+                  <td className='border-b  border-gray-200 text-center text-lg py-3 '  key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

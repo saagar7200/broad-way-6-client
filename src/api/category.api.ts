@@ -15,3 +15,16 @@ console.log(data)
     
 
 }
+
+
+
+export const getAllCategoryByUser = async() =>{
+    try{
+
+        const response = await apiInstance.get('/category/all/user');
+        return response.data;
+
+    }catch(error:any){
+        throw error.response.data
+    }
+}

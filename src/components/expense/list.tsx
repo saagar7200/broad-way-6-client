@@ -3,17 +3,20 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import {useQuery} from '@tanstack/react-query'
 import Table from "../common/table"
-import { getAllCategoryByUser } from "@/api/category.api"
+import { getAllExpenses } from "@/api/expense.api"
 import {toast } from 'react-hot-toast'
 import {formatDate} from '@/utils/format-date'
 import ActionButtons from '@/components/common/list-action-buttons'
-  const columnHelper = createColumnHelper<any>()
+
+
+
+const columnHelper = createColumnHelper<any>()
   
   const columns = [
-    columnHelper.accessor('name', {
-     id:'name',
+    columnHelper.accessor('title', {
+     id:'title',
     cell: info => info.getValue(),
-    header:()=><span> Catergory Name</span>
+    header:()=><span>Ecpense Title</span>
     }),
     columnHelper.accessor(row => row.lastName, {
       id: 'description',
@@ -44,16 +47,15 @@ import ActionButtons from '@/components/common/list-action-buttons'
  
 
 
-const CategoryList = () =>{
+const ExpenseList = () =>{
 
   const {data,isLoading,error} = useQuery({
-    queryFn:getAllCategoryByUser,
-    queryKey:['get-all-user-category']
+    queryFn:getAllExpenses,
+    queryKey:['get-all-user-expense']
   })
 
   if(error){
     toast.error(error?.message ?? 'Something went wrong')
-    return
   }
 
     return(
@@ -64,4 +66,4 @@ const CategoryList = () =>{
         </div>
     )
 }
- export default CategoryList
+ export default ExpenseList
