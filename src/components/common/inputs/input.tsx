@@ -26,12 +26,12 @@ const Input:React.FC<IProps>  =  ({label,error,register,required,name,placeholde
                 {!multiline ? <input  
                     {...register(name)} 
                     placeholder={placeholder}
-                     className={`border border-gray-400 rounded-md py-3 px-3 ${error ? "focus:outline-red-500 border-red-500" :  'focus:outline-blue-400'}`}   
+                     className={`border border-gray-300 rounded-md py-3 px-3 ${error ? "focus:outline-red-500 border-red-500" :  'focus:outline-blue-400'}`}   
                 /> :
                 <textarea  
                     {...register(name)} 
                     placeholder={placeholder}
-                     className='min-h-[120px] border border-gray-400 rounded-md py-2 px-3 focus:outline-blue-400'   
+                     className='min-h-[120px] border border-gray-300 rounded-md py-2 px-3 focus:outline-blue-400'   
                 />}
                 {error && <p className='text-xs text-red-500 mt-0'>{error}</p>}
             </div>

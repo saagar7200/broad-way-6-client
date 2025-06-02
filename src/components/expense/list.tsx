@@ -7,10 +7,35 @@ import { getAllExpenses } from "@/api/expense.api"
 import {toast } from 'react-hot-toast'
 import {formatDate} from '@/utils/format-date'
 import ActionButtons from '@/components/common/list-action-buttons'
+import {useCallback} from 'react'
 
 
 
-const columnHelper = createColumnHelper<any>()
+
+
+
+
+const ExpenseList = () =>{
+
+  const {data,error} = useQuery({
+    queryFn:getAllExpenses,
+    queryKey:['get-all-user-expense']
+  })
+
+  const onDelete = useCallback((id:string) =>{
+    console.log('Delete button clicked',id)
+    // mutate(id)
+   },[])
+
+  const onEdit = useCallback(() =>{
+    console.log('Edit button clicked')
+   },[])
+
+  if(error){
+    toast.error(error?.message ?? 'Something went wrong')
+  }
+
+  const columnHelper = createColumnHelper<any>()
   
   const columns = [
     columnHelper.accessor('title', {
@@ -47,24 +72,11 @@ const columnHelper = createColumnHelper<any>()
     }),
     columnHelper.accessor('action', {
         header: () => <span className='tracking-wider'>Actions</span>,
-        cell:() => <ActionButtons onDelete={()=>{}} onEdit={()=>{}}/>
+        cell:({row}) => <ActionButtons onDelete={()=>onDelete(row.original._id)} onEdit={onEdit}/>
       }),
     
   ]
 
-
-
-
-const ExpenseList = () =>{
-
-  const {data,isLoading,error} = useQuery({
-    queryFn:getAllExpenses,
-    queryKey:['get-all-user-expense']
-  })
-
-  if(error){
-    toast.error(error?.message ?? 'Something went wrong')
-  }
 
     return(
         <div className='w-full'>

@@ -6,8 +6,8 @@ export default function Category() {
    <main>
       <PageHeader
         title="Expense List"
-        buttonText="Add New Category"
-        link="/categories/create"
+        buttonText="Add New Expense"
+        link="/expenses/create"
         Icon={<IoMdAdd size={26}/>}
       />
       <div className=' w-full px-10 mt-10'>
