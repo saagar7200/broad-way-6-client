@@ -16,12 +16,23 @@ const columnHelper = createColumnHelper<any>()
     columnHelper.accessor('title', {
      id:'title',
     cell: info => info.getValue(),
-    header:()=><span>Ecpense Title</span>
+    header:()=><span className='tracking-wider'>Title</span>
     }),
-    columnHelper.accessor(row => row.lastName, {
-      id: 'description',
-      cell: info => <i>{info.getValue() ?? '-'}</i>,
-      header: () => <span>Description</span>,
+    columnHelper.accessor(row => row.amount, {
+      id: 'amount',
+      cell: info => <i className='tracking-wider'>NRP. {info.getValue() ?? '-'}</i>,
+      header: () => <span className='tracking-wider' >Amount (NRP.)</span>,
+      
+    }),
+    columnHelper.accessor('date', {
+      cell: info => <span className='tracking-wider'>{formatDate(info.renderValue())}</span>,
+      header: () => <span className='tracking-wider'>Billing Date</span>,
+      
+    }),
+
+    columnHelper.accessor('category', {
+      cell: info => info.renderValue(),
+      header: () => <span className='tracking-wider'>Category</span>,
       
     }),
     columnHelper.accessor('createdAt', {
@@ -30,21 +41,18 @@ const columnHelper = createColumnHelper<any>()
       
     }),
     columnHelper.accessor('updatedAt', {
-      header: () => <span>Updated At</span>,
+      header: () => <span className='tracking-wider'>Updated At</span>,
       cell: info => formatDate(info.renderValue()),
 
     }),
     columnHelper.accessor('action', {
-        header: () => <span>Actions</span>,
-        cell:() => <ActionButtons/>
+        header: () => <span className='tracking-wider'>Actions</span>,
+        cell:() => <ActionButtons onDelete={()=>{}} onEdit={()=>{}}/>
       }),
     
   ]
 
 
-
-
- 
 
 
 const ExpenseList = () =>{

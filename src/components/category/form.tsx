@@ -3,14 +3,16 @@ import { createCategory } from '@/api/category.api'
 import { ICategory } from '@/interfaces/category.interface'
 import { CategorySchema } from '@/schema/category.schema'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation ,useQueryClient} from '@tanstack/react-query'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Input from '../common/inputs/input'
+import {useRouter} from 'next/navigation'
 
 const CategoryForm  = () => {
-
+    const router = useRouter()
+    const queryClient = useQueryClient()
     const {register,handleSubmit,formState:{errors}} = useForm({
         defaultValues:{
             name:'',
@@ -21,9 +23,10 @@ const CategoryForm  = () => {
 
     const {mutate,isPending} = useMutation({
         mutationFn:createCategory,
-        mutationKey:['category'],
         onSuccess:(data) =>{
             toast.success(data?.message ?? 'Category Added.')
+            router.push('/categories')
+            queryClient.invalidateQueries({queryKey:['get-all-user-category']})
         },
         onError:(data) =>{
             toast.error(data?.message ?? 'Operation failed.')
