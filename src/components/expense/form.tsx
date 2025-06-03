@@ -1,44 +1,48 @@
 'use client'
-import { createCategory } from '@/api/category.api'
-import { ICategory } from '@/interfaces/category.interface'
+// import { createCategory } from '@/api/category.api'
+// import { ICategory } from '@/interfaces/category.interface'
 // import { yupResolver } from '@hookform/resolvers/yup'
-import { useMutation ,useQueryClient} from '@tanstack/react-query'
+// import { useMutation ,useQueryClient} from '@tanstack/react-query'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+// import toast from 'react-hot-toast'
 import Input from '../common/inputs/input'
-import {useRouter} from 'next/navigation'
+// import {useRouter} from 'next/navigation'
 import { LuAsterisk } from "react-icons/lu";
 import ImageUploader from '../common/inputs/file-upload'
 import  SelectCategory from '../common/inputs/category-select-input'
+import { IExpense } from '@/interfaces/expense.interface'
 const ExpenseForm  = () => {
-    const router = useRouter()
-    const queryClient = useQueryClient()
+    // const router = useRouter()
+    // const queryClient = useQueryClient()
+    const isPending = false
     const {control ,register,handleSubmit,formState:{errors}} = useForm({
         defaultValues:{
-            name:'',
+            title:'',
             description:'',
             date:'',
             category:'',
-            amount:0
+            amount:0,
+            receipts:[]
         },
         // resolver:yupResolver(CategorySchema)
     })
 
-    const {mutate,isPending} = useMutation({
-        mutationFn:createCategory,
-        onSuccess:(data) =>{
-            toast.success(data?.message ?? 'Expense Added.')
-            router.push('/categories')
-            queryClient.invalidateQueries({queryKey:['get-all-user-expenses']})
-        },
-        onError:(data) =>{
-            toast.error(data?.message ?? 'Operation failed.')
-        }
-    })
+    // const {mutate,isPending} = useMutation({
+    //     mutationFn:createCategory,
+    //     onSuccess:(data) =>{
+    //         toast.success(data?.message ?? 'Expense Added.')
+    //         router.push('/categories')
+    //         queryClient.invalidateQueries({queryKey:['get-all-user-expenses']})
+    //     },
+    //     onError:(data) =>{
+    //         toast.error(data?.message ?? 'Operation failed.')
+    //     }
+    // })
 
-    const onSubmit = (data:ICategory) =>{
-        mutate(data)
+    const onSubmit = (data:IExpense) =>{
+        console.log(data)
+        // mutate(data)
     }
 
 
@@ -49,9 +53,9 @@ const ExpenseForm  = () => {
            
             <Input
                 label={'Name'}
-                name={'name'}
+                name={'title'}
                 required
-                error={errors?.name?.message}
+                error={errors?.title?.message}
                 register={register}
                 placeholder={'Entertainment'}
             />
