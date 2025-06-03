@@ -8,7 +8,14 @@ interface IProps {
 }
 
 const SelectInput:React.FC<IProps> = ({options}) => (
-  <Select options={options} />
+  <Select 
+  styles={{
+    input: (baseStyles) => ({
+      ...baseStyles,
+      padding:'8px',
+    }),
+  }}
+  options={options} />
 )
 
 export default SelectInput

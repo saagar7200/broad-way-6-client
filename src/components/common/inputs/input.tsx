@@ -10,12 +10,13 @@ interface IProps {
     error?:string;
     required?:boolean;
     placeholder?:string;
-    multiline?:boolean
+    multiline?:boolean;
+    type?: 'text' | 'date' | 'number'
 
 }
 
 
-const Input:React.FC<IProps>  =  ({label,error,register,required,name,placeholder,multiline}) =>{
+const Input:React.FC<IProps>  =  ({label,error,register,required,name,placeholder,multiline,type='text'}) =>{
 
     return(
         <div className='flex flex-col gap-1'>
@@ -25,8 +26,9 @@ const Input:React.FC<IProps>  =  ({label,error,register,required,name,placeholde
                </div>
                 {!multiline ? <input  
                     {...register(name)} 
+                    type={type}
                     placeholder={placeholder}
-                     className={`border border-gray-300 rounded-md py-3 px-3 ${error ? "focus:outline-red-500 border-red-500" :  'focus:outline-blue-400'}`}   
+                    className={`border border-gray-300 rounded-md py-3 px-3 ${error ? "focus:outline-red-500 border-red-500" :  'focus:outline-blue-400'}`}   
                 /> :
                 <textarea  
                     {...register(name)} 

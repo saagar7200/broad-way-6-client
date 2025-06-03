@@ -7,25 +7,25 @@ import { withAuth } from '@/components/auth/withAuth'
 const Layout = ({children}:Readonly<{children:React.ReactNode}>) =>{
 
     return( 
-        <div className={`w-full h-full flex overflow-y-hidden`}>
+        <div className={`w-full h-full flex overflow-y-clip`}>
 
             {/* side bar */}
             <div className='h-full min-h-[100vh] w-[300px] border-r border-blue-500 '>
                 <SideBar/>
             </div>
-            <div className='w-full'>
+            <div className=' w-full  overflow-y-auto'>
                 {/* header */}
-                <div className='z-50  px-5 w-full   py-4  shadow-md top-0 flex items-center '>
+                <div className='z-50 backdrop-blur-2xl  px-5 w-full  fixed   py-4  shadow-md top-0 flex items-center  '>
                     <Header/>
                 </div>
     
                  {/* main content */}
-                 <div className='-z-50 min-h-[100vh] mt-0 flex flex-col h-full p-5 overflow-y-auto'>
+                 <div className='mt-20 pb-20 2xl:pb-0 -z-50  flex flex-col  p-5 overflow-y-auto'>
                     {children}
                 </div>
     
                  {/* footer */}
-                 <div className='fixed bottom-1 w-full border-t border-blue-500 px-5 py-4'>
+                 <div className='fixed z-50 backdrop-blur-2xl bottom-0 w-full border-t border-blue-500 px-5 py-4'>
                     <p>Footer</p>
                 </div>
                 </div>

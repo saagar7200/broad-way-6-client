@@ -8,6 +8,7 @@ import {toast } from 'react-hot-toast'
 import {formatDate} from '@/utils/format-date'
 import ActionButtons from '@/components/common/list-action-buttons'
 import {useCallback} from 'react'
+import { IExpenseResponse } from "@/interfaces/expense.interface"
 
 
 
@@ -35,7 +36,7 @@ const ExpenseList = () =>{
     toast.error(error?.message ?? 'Something went wrong')
   }
 
-  const columnHelper = createColumnHelper<any>()
+  const columnHelper = createColumnHelper<IExpenseResponse & {action:any}>()
   
   const columns = [
     columnHelper.accessor('title', {
@@ -50,24 +51,24 @@ const ExpenseList = () =>{
       
     }),
     columnHelper.accessor('date', {
-      cell: info => <span className='tracking-wider'>{formatDate(info.renderValue())}</span>,
+      cell: info => <span className='tracking-wider'>{formatDate(info.renderValue()?? '') ?? '-'}</span>,
       header: () => <span className='tracking-wider'>Billing Date</span>,
       
     }),
 
     columnHelper.accessor('category', {
-      cell: info => info.renderValue(),
+      cell: info => <span className='bg-teal-700 py-1 px-2 rounded-md text-white '>{info.renderValue()?.name}</span>,
       header: () => <span className='tracking-wider'>Category</span>,
       
     }),
     columnHelper.accessor('createdAt', {
-      cell: info => formatDate(info.renderValue()),
+      cell: info => formatDate(info.renderValue() ?? '') ?? '-',
       header: () => <span>Created At</span>,
       
     }),
     columnHelper.accessor('updatedAt', {
       header: () => <span className='tracking-wider'>Updated At</span>,
-      cell: info => formatDate(info.renderValue()),
+      cell: info => formatDate(info.renderValue() ?? '') ?? '-',
 
     }),
     columnHelper.accessor('action', {
