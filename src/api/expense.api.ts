@@ -11,3 +11,13 @@ export const getAllExpenses = async() =>{
         throw error.response.data
     }
 }
+
+export const createExpense = async(data:any) =>{
+    try{
+        const response = await apiInstance.post(`/expense/`,data)
+        return response.data
+
+    }catch(error:any){
+        throw error.response.data
+    }
+}

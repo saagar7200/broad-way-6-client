@@ -7,12 +7,18 @@ interface IImage{
     public_id:string
 } 
 
+interface ICategoryOption {
+    label:string,
+    value:string
+}
+
 export interface IExpense {
     title:string;
     amount:number;
     date:string;
-    category:any;
-    receipts:File[]
+    category:ICategoryOption | string;
+    receipts?:File[] ,
+    description?:string
 }
 
 export interface IExpenseResponse {

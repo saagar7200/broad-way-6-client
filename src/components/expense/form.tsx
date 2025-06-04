@@ -1,54 +1,70 @@
 'use client'
-// import { createCategory } from '@/api/category.api'
-// import { ICategory } from '@/interfaces/category.interface'
-// import { yupResolver } from '@hookform/resolvers/yup'
-// import { useMutation ,useQueryClient} from '@tanstack/react-query'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation ,useQueryClient} from '@tanstack/react-query'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-// import toast from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import Input from '../common/inputs/input'
-// import {useRouter} from 'next/navigation'
-import { LuAsterisk } from "react-icons/lu";
+import {useRouter} from 'next/navigation'
 import ImageUploader from '../common/inputs/file-upload'
 import  SelectCategory from '../common/inputs/category-select-input'
 import { IExpense } from '@/interfaces/expense.interface'
+import expenseSchema from '@/schema/expense.schema'
+import { createExpense } from '@/api/expense.api'
 const ExpenseForm  = () => {
-    // const router = useRouter()
-    // const queryClient = useQueryClient()
-    const isPending = false
+    const router = useRouter()
+    const queryClient = useQueryClient()
     const {control ,register,handleSubmit,formState:{errors}} = useForm({
         defaultValues:{
             title:'',
             description:'',
             date:'',
             category:'',
-            amount:0,
             receipts:[]
         },
-        // resolver:yupResolver(CategorySchema)
+        resolver:yupResolver(expenseSchema)
     })
 
-    // const {mutate,isPending} = useMutation({
-    //     mutationFn:createCategory,
-    //     onSuccess:(data) =>{
-    //         toast.success(data?.message ?? 'Expense Added.')
-    //         router.push('/categories')
-    //         queryClient.invalidateQueries({queryKey:['get-all-user-expenses']})
-    //     },
-    //     onError:(data) =>{
-    //         toast.error(data?.message ?? 'Operation failed.')
-    //     }
-    // })
+    console.log(errors)
+
+    const {mutate,isPending} = useMutation({
+        mutationFn:createExpense,
+        onSuccess:(data) =>{
+            toast.success(data?.message ?? 'Expense Added.')
+            router.back()
+            queryClient.invalidateQueries({queryKey:['get-all-user-expenses']})
+        },
+        onError:(data) =>{
+            toast.error(data?.message ?? 'Operation failed.')
+        }
+    })
 
     const onSubmit = (data:IExpense) =>{
-        console.log(data)
-        // mutate(data)
+        const {category,title,amount,date,description,receipts} = data
+        const formData = new FormData()
+        formData.append('title',title)
+        formData.append('amount',amount.toString())
+        formData.append('date',date)
+        formData.append('categoryId',typeof category === 'string' ? category : category?.value)
+        if(description ) {
+            formData.append('description',description)
+        }
+
+        if(receipts &&  receipts?.length > 0 && Array.isArray(receipts)){
+            receipts.forEach((file) =>{
+                formData.append('receipts',file)
+            })
+        }
+         
+        console.log(formData)
+        mutate(formData)
     }
 
 
   return (
   <div className=' h-full w-full flex items-center mt-10'>
       <div className='flex w-[min(100%,500px)]  mx-auto tracking-wider border border-blue-400  px-6 py-8  rounded-md'>
+        {/* @ts-expect-error //amount  */}
         <form className='w-full flex flex-col gap-2' onSubmit={handleSubmit(onSubmit)}>
            
             <Input
@@ -59,7 +75,7 @@ const ExpenseForm  = () => {
                 register={register}
                 placeholder={'Entertainment'}
             />
-            <SelectCategory/>
+            <SelectCategory error={errors.category?.message} required control={control}/>
 
 
            <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-2 items-center'>
@@ -73,13 +89,7 @@ const ExpenseForm  = () => {
                 placeholder={'1000'}
             />
 
-            {/* <div className='flex flex-col gap-1 mt-1'>
-                <div className='flex  gap-1/2'>
-                <label htmlFor='date'>Billing Date</label>
-                <LuAsterisk size={18} className='text-red-500'/>
-                </div>
-                <input className={`border border-gray-300 px-2 py-3 rounded-md`} type='date'/>
-            </div> */}
+            
             <Input
                 label={'Billing Date'}
                 name={'date'}
@@ -92,11 +102,8 @@ const ExpenseForm  = () => {
             />
             </div>
             <div className='flex flex-col gap-1'>
-            <div className='flex  gap-1/2'>
-                <label htmlFor='date'>Receipts</label>
-                <LuAsterisk size={18} className='text-red-500'/>
-                </div>
-                <ImageUploader name='receipts' control={control}/>
+           
+                <ImageUploader label={'Receipts'} name='receipts' control={control}/>
             </div>
 
             <Input

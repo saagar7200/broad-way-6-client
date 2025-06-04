@@ -26,7 +26,9 @@ const Input:React.FC<IProps>  =  ({label,error,register,required,name,placeholde
                </div>
                 {!multiline ? <input  
                     {...register(name)} 
+                    
                     type={type}
+                    
                     placeholder={placeholder}
                     className={`border border-gray-300 rounded-md py-3 px-3 ${error ? "focus:outline-red-500 border-red-500" :  'focus:outline-blue-400'}`}   
                 /> :
@@ -35,7 +37,7 @@ const Input:React.FC<IProps>  =  ({label,error,register,required,name,placeholde
                     placeholder={placeholder}
                      className='min-h-[120px] border border-gray-300 rounded-md py-2 px-3 focus:outline-blue-400'   
                 />}
-                {error && <p className='text-xs text-red-500 mt-0'>{error}</p>}
+                 <p className='text-xs min-h-[20px] text-red-500 mt-0'>{error ?? ''}</p>
             </div>
     )
 }

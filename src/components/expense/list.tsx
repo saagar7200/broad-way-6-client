@@ -20,7 +20,7 @@ const ExpenseList = () =>{
 
   const {data,error} = useQuery({
     queryFn:getAllExpenses,
-    queryKey:['get-all-user-expense']
+    queryKey:['get-all-user-expenses']
   })
 
   const onDelete = useCallback((id:string) =>{
