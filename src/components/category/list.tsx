@@ -3,16 +3,18 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import {useQuery,useMutation,useQueryClient} from '@tanstack/react-query'
 import Table from "../common/table"
-import { getAllCategoryByUser,deteleCategory } from "@/api/category.api"
+import { getAllCategoryByUser,deleteCategory } from "@/api/category.api"
 import {toast } from 'react-hot-toast'
 import {formatDate} from '@/utils/format-date'
 import ActionButtons from '@/components/common/list-action-buttons'
 import { useCallback } from "react"
+import { useRouter } from "next/navigation"
   
 
 
 const CategoryList = () =>{
   const columnHelper = createColumnHelper<any>()
+  const router = useRouter()
   const queryClient = useQueryClient()
   const {data,isLoading,error} = useQuery({
     queryFn:getAllCategoryByUser,
@@ -20,7 +22,7 @@ const CategoryList = () =>{
   })
 
   const {mutate} = useMutation({
-    mutationFn:deteleCategory,
+    mutationFn:deleteCategory,
     onSuccess:(response) =>{
         console.log(response)
         toast.success(response.message ?? 'Category deleted')
@@ -37,8 +39,8 @@ const CategoryList = () =>{
     mutate(id)
    },[mutate])
 
-  const onEdit = useCallback(() =>{
-    console.log('Edit button clicked')
+  const onEdit = useCallback((id:string) =>{
+    router.push('/categories/update/${id}')
    },[])
 
   if(error){
@@ -82,7 +84,7 @@ const CategoryList = () =>{
     }),
     columnHelper.accessor('action', {
         header: () => <span>Actions</span>,
-        cell:(info) => <ActionButtons onDelete={()=>onDelete(info.row.original._id)} onEdit={onEdit}/>
+        cell:(info) => <ActionButtons onDelete={()=>onDelete(info.row.original._id)} onEdit={() => onEdit(info.row.original._id)}/>
       }),
     
   ]

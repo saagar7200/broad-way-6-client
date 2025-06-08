@@ -12,7 +12,7 @@ export const createCategory = async(data:ICategory) =>{
     }
 }
 
-export const deteleCategory = async(id:string) =>{
+export const deleteCategory = async(id:string) =>{
     try{
         const response = await apiInstance.delete(`/category/${id}`)
         return response.data
