@@ -21,3 +21,13 @@ export const createExpense = async(data:any) =>{
         throw error.response.data
     }
 }
+
+export const getById = async(id:string) =>{
+    try {
+        const response = await  apiInstance.get(`/expense/${id}`)
+       return response.data
+        
+    } catch (error:any) {
+        throw error.response.data
+    }
+}

@@ -1,27 +1,43 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import Image from 'next/image';
-import { useDropzone } from 'react-dropzone';
+"use client";
+import React, { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
+import { useDropzone, FileRejection } from "react-dropzone";
+import { ControllerRenderProps, FieldState } from "react-hook-form";
 
 const MAX_FILES = 3;
 const MAX_FILE_SIZE_MB = 10;
 
-const ImageUploaderField = ({ field, fieldState, multiple }) => {
+type FileWithPreview = File & { preview: string };
+
+type ImageUploaderFieldProps = {
+  field: ControllerRenderProps<any, any>;
+  fieldState: FieldState;
+  multiple?: boolean;
+};
+
+const ImageUploaderField: React.FC<ImageUploaderFieldProps> = ({
+  field,
+  fieldState,
+  multiple = false,
+}) => {
   const { onChange, value } = field;
   const { error } = fieldState;
 
-  const [files, setFiles] = useState(value || []);
-  const [dropError, setDropError] = useState(null);
+  const [files, setFiles] = useState<FileWithPreview[]>(value || []);
+  const [dropError, setDropError] = useState<string | null>(null);
 
   const onDrop = useCallback(
-    (acceptedFiles, fileRejections) => {
+    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       setDropError(null);
 
       if (fileRejections.length > 0) {
-        setDropError('Some files were rejected. Please ensure they are under 10MB and valid image types.');
+        setDropError(
+          "Some files were rejected. Please ensure they are under 10MB and valid image types."
+        );
         return;
       }
 
-      let newFiles = acceptedFiles.map(file =>
+      let newFiles: FileWithPreview[] = acceptedFiles.map((file) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
         })
@@ -31,7 +47,9 @@ const ImageUploaderField = ({ field, fieldState, multiple }) => {
         newFiles = newFiles.slice(0, 1);
       }
 
-      const combinedFiles = multiple ? [...files, ...newFiles].slice(0, MAX_FILES) : newFiles;
+      const combinedFiles = multiple
+        ? [...files, ...newFiles].slice(0, MAX_FILES)
+        : newFiles;
 
       setFiles(combinedFiles);
       onChange(combinedFiles);
@@ -39,22 +57,18 @@ const ImageUploaderField = ({ field, fieldState, multiple }) => {
     [files, multiple, onChange]
   );
 
-  const removeImage = (index) => {
+  const removeImage = (index: number) => {
     const updatedFiles = [...files];
     updatedFiles.splice(index, 1);
     setFiles(updatedFiles);
     onChange(updatedFiles);
   };
 
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-  } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple,
     accept: {
-      'image/*': [],
+      "image/*": [],
     },
     maxSize: MAX_FILE_SIZE_MB * 1024 * 1024,
   });
@@ -62,7 +76,7 @@ const ImageUploaderField = ({ field, fieldState, multiple }) => {
   // Revoke data URIs to avoid memory leaks
   useEffect(() => {
     return () => {
-      files.forEach(file => URL.revokeObjectURL(file.preview));
+      files.forEach((file) => URL.revokeObjectURL(file.preview));
     };
   }, [files]);
 
@@ -71,14 +85,16 @@ const ImageUploaderField = ({ field, fieldState, multiple }) => {
       <div
         {...getRootProps()}
         className={`border-1 border-dashed p-6 rounded-md text-center transition-colors duration-300 cursor-pointer ${
-          isDragActive ? 'bg-gray-100 border-blue-400' : 'bg-white border-gray-300'
-        } ${dropError ? 'border-red-500' : ''}`}
+          isDragActive ? "bg-gray-100 border-blue-400" : "bg-white border-gray-300"
+        } ${dropError ? "border-red-500" : ""}`}
       >
         <input {...getInputProps()} />
         <p className="text-gray-600">
-          Drag and drop image{multiple ? 's' : ''} here, or click to select
+          Drag and drop image{multiple ? "s" : ""} here, or click to select
         </p>
-        <p className="text-sm text-gray-400 mt-1">(Max {MAX_FILES} images, {MAX_FILE_SIZE_MB}MB each)</p>
+        <p className="text-sm text-gray-400 mt-1">
+          (Max {MAX_FILES} images, {MAX_FILE_SIZE_MB}MB each)
+        </p>
       </div>
 
       {dropError && <p className="text-red-500 text-sm mt-2">{dropError}</p>}
@@ -87,7 +103,10 @@ const ImageUploaderField = ({ field, fieldState, multiple }) => {
       {files.length > 0 && (
         <div className="flex flex-wrap mt-4 gap-4">
           {files.map((file, index) => (
-            <div key={index} className="relative w-24 h-24 rounded overflow-hidden border">
+            <div
+              key={index}
+              className="relative w-24 h-24 rounded overflow-hidden border"
+            >
               <Image
                 height={400}
                 width={400}

@@ -61,6 +61,7 @@ const SignUpForm = () => {
 
 	return (
 		<div className="">
+			{/* @ts-expect-error //onSubmit */}
 			<form className="w-full  flex justify-center items-center" onSubmit={handleSubmit(onSubmit)}>
 				<div className="w-full rounded-md">
 					<div className="flex flex-col gap-1 ">

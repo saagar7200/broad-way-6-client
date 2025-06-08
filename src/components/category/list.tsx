@@ -23,7 +23,7 @@ const CategoryList = () =>{
     mutationFn:deteleCategory,
     onSuccess:(response) =>{
         console.log(response)
-        toast.success(response.messae ?? 'Category deleted')
+        toast.success(response.message ?? 'Category deleted')
         queryClient.invalidateQueries({queryKey:['get-all-user-category']})
     },
     onError:(error) =>{
@@ -44,6 +44,14 @@ const CategoryList = () =>{
   if(error){
     toast.error(error?.message ?? 'Something went wrong')
     return
+  }
+
+  if(isLoading){
+    return(
+      <div>
+        Loading....
+      </div>
+    )
   }
 
 

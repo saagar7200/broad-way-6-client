@@ -9,6 +9,7 @@ import {formatDate} from '@/utils/format-date'
 import ActionButtons from '@/components/common/list-action-buttons'
 import {useCallback} from 'react'
 import { IExpenseResponse } from "@/interfaces/expense.interface"
+import { useRouter } from "next/navigation"
 
 
 
@@ -17,6 +18,8 @@ import { IExpenseResponse } from "@/interfaces/expense.interface"
 
 
 const ExpenseList = () =>{
+
+  const router = useRouter()
 
   const {data,error} = useQuery({
     queryFn:getAllExpenses,
@@ -31,6 +34,11 @@ const ExpenseList = () =>{
   const onEdit = useCallback(() =>{
     console.log('Edit button clicked')
    },[])
+
+   const onView = useCallback((id:string) =>{
+    console.log('Edit button clicked')
+    router.push(`/expenses/view/${id}`)
+   },[router])
 
   if(error){
     toast.error(error?.message ?? 'Something went wrong')
@@ -73,7 +81,7 @@ const ExpenseList = () =>{
     }),
     columnHelper.accessor('action', {
         header: () => <span className='tracking-wider'>Actions</span>,
-        cell:({row}) => <ActionButtons onDelete={()=>onDelete(row.original._id)} onEdit={onEdit}/>
+        cell:({row}) => <ActionButtons onView={() =>onView(row.original._id)} onDelete={()=>onDelete(row.original._id)} onEdit={onEdit}/>
       }),
     
   ]
