@@ -1,5 +1,8 @@
+import UpdateCategory from '@/components/category/update-form';
+import { PageHeader } from '@/components/common/page-header';
 import { Metadata } from 'next';
 import React from 'react'
+import { BiChevronLeft } from 'react-icons/bi';
 
 type Props = {
     params:Promise<{
@@ -17,7 +20,17 @@ export const metadata: Metadata = {
 const Page = async({params}: Props) => {
   const {id} = await params
   return (
-    <div>Page{id}</div>
+    <main>
+      <PageHeader
+        title="Update Category"
+        buttonText="Go Back"
+        link="/categories"
+        Icon={<BiChevronLeft size={26}/>}
+      />
+
+      <UpdateCategory id={id}/>
+
+    </main>
   )
 }
 

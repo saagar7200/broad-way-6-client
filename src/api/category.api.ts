@@ -22,6 +22,16 @@ export const deleteCategory = async(id:string) =>{
     }
 }
 
+export const getCategoryById = async(id:string) =>{
+    try{
+        const response = await apiInstance.get(`/category/${id}`)
+        return response.data
+
+    }catch(error:any){
+        throw error.response.data
+    }
+}
+
 
 
 export const getAllCategoryByUser = async() =>{

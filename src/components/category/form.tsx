@@ -1,25 +1,37 @@
 'use client'
 import { createCategory } from '@/api/category.api'
-import { ICategory } from '@/interfaces/category.interface'
+import { ICategory, ICategoryResponse } from '@/interfaces/category.interface'
 import { CategorySchema } from '@/schema/category.schema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation ,useQueryClient} from '@tanstack/react-query'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Input from '../common/inputs/input'
 import {useRouter} from 'next/navigation'
+interface  IProps {
+    data?:ICategoryResponse
+}
 
-const CategoryForm  = () => {
+const getCategoryUpdateData = (data:ICategoryResponse) =>{
+    return {
+        name:data.name,
+        description:data.description
+    }
+}
+
+const CategoryForm:React.FC<IProps>  = ({data}) => {
     const router = useRouter()
     const queryClient = useQueryClient()
-    const {register,handleSubmit,formState:{errors}} = useForm({
+    
+    const {reset,register,handleSubmit,formState:{errors}} = useForm({
         defaultValues:{
             name:'',
             description:''
         },
         resolver:yupResolver(CategorySchema)
     })
+
 
     const {mutate,isPending} = useMutation({
         mutationFn:createCategory,
@@ -32,6 +44,14 @@ const CategoryForm  = () => {
             toast.error(data?.message ?? 'Operation failed.')
         }
     })
+
+
+    useEffect(()=>{
+        if(data){
+            const categoryData = getCategoryUpdateData(data)
+            reset(categoryData)
+        }
+    },[data])
 
     const onSubmit = (data:ICategory) =>{
         mutate(data)
