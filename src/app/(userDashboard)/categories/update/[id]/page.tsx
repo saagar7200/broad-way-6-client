@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import React from 'react'
 
 type Props = {
@@ -6,6 +7,12 @@ type Props = {
     }>
 
 }
+
+
+export const metadata: Metadata = {
+  title: "Expense Tracker | Update Category",
+  description: "Track Your Daily Expenses",
+};
 
 const Page = async({params}: Props) => {
   const {id} = await params

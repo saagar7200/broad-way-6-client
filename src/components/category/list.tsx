@@ -40,7 +40,7 @@ const CategoryList = () =>{
    },[mutate])
 
   const onEdit = useCallback((id:string) =>{
-    router.push('/categories/update/${id}')
+    router.push(`/categories/update/${id}`)
    },[])
 
   if(error){
