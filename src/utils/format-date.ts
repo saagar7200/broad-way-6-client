@@ -6,6 +6,6 @@ export const formatDate = (dateString:string) =>{
       }
 
      const  date =new Date(dateString)
-
+// @ts-expect-error //year
    return  date.toLocaleDateString('en-Us',options)
 }

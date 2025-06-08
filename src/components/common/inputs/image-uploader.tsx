@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { useDropzone, FileRejection } from "react-dropzone";
-import { ControllerRenderProps, FieldState } from "react-hook-form";
+import { ControllerRenderProps } from "react-hook-form";
 
 const MAX_FILES = 3;
 const MAX_FILE_SIZE_MB = 10;
@@ -11,7 +12,7 @@ type FileWithPreview = File & { preview: string };
 
 type ImageUploaderFieldProps = {
   field: ControllerRenderProps<any, any>;
-  fieldState: FieldState;
+  fieldState: any;
   multiple?: boolean;
 };
 
