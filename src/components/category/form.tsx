@@ -1,5 +1,5 @@
 'use client'
-import { createCategory } from '@/api/category.api'
+import { createCategory ,updateCategory} from '@/api/category.api'
 import { ICategory, ICategoryResponse } from '@/interfaces/category.interface'
 import { CategorySchema } from '@/schema/category.schema'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -10,7 +10,7 @@ import toast from 'react-hot-toast'
 import Input from '../common/inputs/input'
 import {useRouter} from 'next/navigation'
 interface  IProps {
-    data?:ICategoryResponse
+    category?:ICategoryResponse
 }
 
 const getCategoryUpdateData = (data:ICategoryResponse) =>{
@@ -20,7 +20,8 @@ const getCategoryUpdateData = (data:ICategoryResponse) =>{
     }
 }
 
-const CategoryForm:React.FC<IProps>  = ({data}) => {
+const CategoryForm:React.FC<IProps>  = ({category}) => {
+    console.log('category',category)
     const router = useRouter()
     const queryClient = useQueryClient()
     
@@ -45,16 +46,35 @@ const CategoryForm:React.FC<IProps>  = ({data}) => {
         }
     })
 
+    const {mutate:update,isPending:updatePending} = useMutation({
+        mutationFn:(data:ICategory) => updateCategory(data,category?._id ?? ''),
+        onSuccess:(data) =>{
+            toast.success(data?.message ?? 'Category updated.')
+            router.push('/categories')
+            queryClient.invalidateQueries({queryKey:['get-all-user-category']})
+        },
+        onError:(data) =>{
+            toast.error(data?.message ?? 'Operation failed.')
+        }
+    })
+
 
     useEffect(()=>{
-        if(data){
-            const categoryData = getCategoryUpdateData(data)
+        if(category){
+            const categoryData = getCategoryUpdateData(category)
             reset(categoryData)
         }
-    },[data])
+    },[category])
 
     const onSubmit = (data:ICategory) =>{
-        mutate(data)
+
+        if(category){
+            update(data)
+        }else{
+
+            mutate(data)
+        }
+
     }
 
 
@@ -84,9 +104,13 @@ const CategoryForm:React.FC<IProps>  = ({data}) => {
 
 
             <div className='w-full flex items-center mt-8 '>
-                <button disabled={isPending} className='cursor-pointer disabled:cursor-not-allowed disabled:bg-blue-300  w-full bg-blue-500 text-amber-50 font-bold text-xl py-3 rounded-md'>
+                {category ?
+                <button disabled={updatePending} className='cursor-pointer disabled:cursor-not-allowed disabled:bg-blue-300  w-full bg-blue-500 text-amber-50 font-bold text-xl py-3 rounded-md'>
+                {updatePending ?'Updating...' :"Update"}
+            </button> 
+            :   <button disabled={isPending} className='cursor-pointer disabled:cursor-not-allowed disabled:bg-blue-300  w-full bg-blue-500 text-amber-50 font-bold text-xl py-3 rounded-md'>
                     {isPending ?'Creating...' :"Create"}
-                </button>
+                </button>}
             </div>
         </form>
         

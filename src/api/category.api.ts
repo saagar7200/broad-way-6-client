@@ -12,6 +12,18 @@ export const createCategory = async(data:ICategory) =>{
     }
 }
 
+
+export const updateCategory = async(data:Partial<ICategory> , id:string) =>{
+    try{
+        console.log(data,id)
+        const response = await apiInstance.put(`/category/${id}`,data)
+        return response.data
+
+    }catch(error:any){
+        throw error.response.data
+    }
+}
+
 export const deleteCategory = async(id:string) =>{
     try{
         const response = await apiInstance.delete(`/category/${id}`)

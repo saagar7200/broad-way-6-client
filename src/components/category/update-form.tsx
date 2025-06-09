@@ -23,11 +23,10 @@ const UpdateCategory = ({id}: Props) => {
         )
     }
 
-    console.log(data)
 
   return (
     <section>
-        <CategoryForm data={data?.data}/>
+        <CategoryForm category={data?.data}/>
     </section>
   )
 }
